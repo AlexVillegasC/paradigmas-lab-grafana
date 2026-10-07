@@ -1,0 +1,49 @@
+name: Compose stack
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Startup configuration
+        required: true
+        default: development
+        type: choice
+        options:
+          - local
+          - development
+
+jobs:
+  up:
+    runs-on: ubuntu-latest
+    env:
+      CONNECTION_STRING: ${{ secrets.CONNECTION_STRING }}
+    steps:
+      - name: Checkout infrastructure
+        uses: actions/checkout@v4
+        with:
+          path: infrastructure
+
+      - name: Checkout API
+        uses: actions/checkout@v4
+        with:
+          repository: AlexVillegasC/LibrariesApiTest
+          path: LibrariesApiTest
+
+      - name: Checkout frontend
+        uses: actions/checkout@v4
+        with:
+          repository: AlexVillegasC/LibrariesFE
+          path: LibrariesFE
+
+      - name: Start stack
+        working-directory: infrastructure
+        run: |
+          ENV_FILE=".env.${{ inputs.environment }}"
+          if [ ! -f "$ENV_FILE" ]; then
+            cp "${ENV_FILE}.example" "$ENV_FILE"
+          fi
+          PROFILE_ARGS=""
+          if [ "${{ inputs.environment }}" = "local" ]; then
+            PROFILE_ARGS="--profile local"
+          fi
+          docker compose --env-file "$ENV_FILE" $PROFILE_ARGS up -d --build

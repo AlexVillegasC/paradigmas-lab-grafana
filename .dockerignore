@@ -1,0 +1,30 @@
+.git
+.gitignore
+.github
+.gitattributes
+
+# Local/real environment files (secrets)
+.env
+.env.*
+!.env.*.example
+
+# Docker/compose metadata not needed in a build context
+docker-compose*.yml
+compose*.yml
+Dockerfile*
+.dockerignore
+
+# Docs and editor/OS noise
+*.md
+.vscode
+.idea
+*.suo
+*.user
+.DS_Store
+Thumbs.db
+
+# Logs and temp artifacts
+*.log
+logs
+tmp
+temp
