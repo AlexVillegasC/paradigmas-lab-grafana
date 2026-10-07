@@ -52,6 +52,8 @@ docker compose --env-file .env.${{ inputs.environment }} ${{ inputs.environment 
 
 Checkout this repo and the two app repos as siblings (`LibrariesApiTest`, `LibrariesFE`) so the default `API_CONTEXT` / `FE_CONTEXT` paths resolve. Override those variables, or `API_IMAGE` / `FE_IMAGE`, if the pipeline builds images elsewhere.
 
+When run locally, `start.ps1` clones the missing app repos into `API_CONTEXT` / `FE_CONTEXT` automatically, using `API_REPO` / `API_REF` and `FE_REPO` / `FE_REF` from the selected env file (defaults: API `identity-server`, frontend `main`).
+
 Put the real Supabase connection string in a GitHub secret named `CONNECTION_STRING` and export it before Compose so it overrides the placeholder in `.env.development`. Escape any `$` in that string as `$$` so Compose does not treat it as interpolation.
 
 ## App env files
